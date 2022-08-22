@@ -311,11 +311,11 @@ jobs:
           command: |
             cd backend
             npm i
-            # npm fix audit
+            npm fix audit
             npm run build
-            # ls -lh
+            ls -lh
             cd ..
-            # pwd
+            pwd
             tar -C backend -czvf artifact.tar.gz .
             tar -ztvf artifact.tar.gz
             mkdir .circleci/ansible/roles/deploy/files/
@@ -340,7 +340,6 @@ jobs:
           command: |
             apk add --update curl nodejs npm
             pip3 install awscli
-
       - run:
           name: Get backend url
           command: |
