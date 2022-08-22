@@ -329,12 +329,12 @@ jobs:
 
   smoke-test:
     docker:
+      # Docker image
       - image: python:3.9.1-alpine3.12
     steps:
       - checkout
       - attach_workspace:
           at: ~/
-
       - run:
           name: Install dependencies
           command: |
@@ -347,7 +347,6 @@ jobs:
             export BACKEND_IP=$(cat ~/backend_ip.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-
       - run:
           name: Backend smoke test.
           command: |
@@ -359,7 +358,6 @@ jobs:
             else
                 return 1
             fi
-
       - run:
           name: Frontend smoke test.
           command: |
@@ -372,7 +370,6 @@ jobs:
             else
               return 1
             fi
-            
       - destroy-environment
       - revert-migrations
 
