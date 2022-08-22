@@ -334,17 +334,20 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/
+
       - run:
           name: Install dependencies
           command: |
             apk add --update curl nodejs npm
             pip3 install awscli
+
       - run:
           name: Get backend url
           command: |
             export BACKEND_IP=$(cat ~/backend_ip.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
+
       - run:
           name: Backend smoke test.
           command: |
@@ -356,6 +359,7 @@ jobs:
             else
                 return 1
             fi
+
       - run:
           name: Frontend smoke test.
           command: |
@@ -368,6 +372,7 @@ jobs:
             else
               return 1
             fi
+            
       - destroy-environment
       - revert-migrations
 
