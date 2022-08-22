@@ -329,7 +329,7 @@ jobs:
 
   smoke-test:
     docker:
-      # Docker image
+      # Docker image - python
       - image: python:3.9.1-alpine3.12
     steps:
       - checkout
