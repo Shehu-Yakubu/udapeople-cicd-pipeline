@@ -313,7 +313,9 @@ jobs:
             npm install
             npm fix audit
             npm run build
+            ls -lh
             cd ..
+            pwd
             tar -C backend -czvf artifact.tar.gz .
             tar -ztvf artifact.tar.gz
             mkdir .circleci/ansible/roles/deploy/files/
