@@ -306,7 +306,6 @@ jobs:
           command: |
             apk add --update curl tar gzip openssh-client ansible nodejs npm
             pip3 install awscli
-            # install-awscli
       - run:
           name: Deploy backend
           command: |
