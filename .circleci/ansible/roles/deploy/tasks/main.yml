@@ -27,7 +27,6 @@
   become: true 
   apt: 
     name: pm2 
-    state: latest
-    # global: yes 
-    # production: yes 
-    # state: present
+    global: yes 
+    production: yes 
+    state: present
