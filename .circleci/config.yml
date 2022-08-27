@@ -332,6 +332,7 @@ jobs:
       # Docker image
       - image: python:3.7-alpine3.11
     steps:
+      # checkout
       - checkout
       - attach_workspace:
           at: ~/
