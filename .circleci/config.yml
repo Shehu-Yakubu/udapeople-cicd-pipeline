@@ -198,7 +198,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-      - revert-migrations
+      # - revert-migrations
 
   configure-infrastructure:
     docker:
@@ -226,7 +226,7 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
-      - destroy-environment
+      # - destroy-environment
 
   run-migrations:
     docker:
@@ -324,8 +324,8 @@ jobs:
             cat inventory.txt
 
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - revert-migrations
       - destroy-environment
+      - revert-migrations
 
   smoke-test:
     docker:
@@ -369,8 +369,8 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
 
   # cloudfront-update:
   #   docker:
