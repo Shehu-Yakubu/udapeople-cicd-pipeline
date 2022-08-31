@@ -235,6 +235,8 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
 
   configure-infrastructure:
     docker:
@@ -264,6 +266,8 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
             cat ~/project/.circleci/ansible/inventory.txt
       - destroy-environment
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
 
   run-migrations:
     docker:
@@ -289,6 +293,8 @@ jobs:
               curl "https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_${CIRCLE_WORKFLOW_ID:0:7}"  -d '1'
             fi
       - destroy-environment
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
 
   deploy-frontend:
     docker:
@@ -334,7 +340,11 @@ jobs:
       #     paths:
       #       - backend_ip.txt
       - destroy-environment
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
       - revert-migrations
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
                     
   deploy-backend:
     docker:
@@ -376,7 +386,11 @@ jobs:
 
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
       - revert-migrations
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
 
   smoke-test:
     docker:
@@ -420,7 +434,11 @@ jobs:
               return 1
             fi
       - destroy-environment
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
       - revert-migrations
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
 
   # cloudfront-update:
   #   docker:
@@ -462,27 +480,36 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
+
       - test-frontend:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
+
       - scan-frontend:
-          requires: [build-frontend]
+          requires: [test-frontend]
+      - scan-backend:
+          requires: [test-backend]
+
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      
       - configure-infrastructure:
           requires: [deploy-infrastructure]
+
       - run-migrations:
           requires: [configure-infrastructure]
+
       - deploy-frontend:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
+
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
+
       # - cloudfront-update:
       #     requires: [smoke-test]
+
       # - cleanup:
       #     requires: [cloudfront-update]
