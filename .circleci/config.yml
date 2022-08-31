@@ -71,7 +71,7 @@ commands:
     parameters:
       Workflow_ID:
         type: string
-        # default: ${CIRCLE_WORKFLOW_ID:0:7}
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     
     steps:
       - run:
@@ -235,7 +235,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   configure-infrastructure:
@@ -266,7 +266,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
             cat ~/project/.circleci/ansible/inventory.txt
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   run-migrations:
@@ -293,7 +293,7 @@ jobs:
               curl "https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_${CIRCLE_WORKFLOW_ID:0:7}"  -d '1'
             fi
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   deploy-frontend:
@@ -340,10 +340,10 @@ jobs:
       #     paths:
       #       - backend_ip.txt
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
       - revert-migrations
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
                     
   deploy-backend:
@@ -386,10 +386,10 @@ jobs:
 
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
       - revert-migrations
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   smoke-test:
@@ -434,10 +434,10 @@ jobs:
               return 1
             fi
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
       - revert-migrations
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   # cloudfront-update:
