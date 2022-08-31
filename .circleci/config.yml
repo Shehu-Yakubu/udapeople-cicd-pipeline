@@ -55,7 +55,7 @@ commands:
           when: on_fail
           command: |
             # Sending migrations to 3rd party - kvdb.io
-            export SUCCESS = $(curl --insecure https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_<< parameters.Workflow_ID >>)
+            SUCCESS=$(curl --insecure https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_<< parameters.Workflow_ID >>)
             
             if(( $SUCCESS == 1 )); 
             then
@@ -253,7 +253,7 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              sudo apt-get update && sudo apt-get install -y ca-certificates
+              # sudo apt-get update && sudo apt-get install -y ca-certificates
               
               curl https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
