@@ -234,7 +234,7 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
-      - destroy-environment
+      # - destroy-environment
 
   run-migrations:
     docker:
@@ -268,8 +268,8 @@ jobs:
           root: ~/
           paths:
               - project/backend/migrations_dump.txt
-      - revert-migrations
-      - destroy-environment
+      # - revert-migrations
+      # - destroy-environment
 
   deploy-frontend:
     docker:
@@ -310,8 +310,8 @@ jobs:
           root: ~/
           paths:
             - backend_ip.txt
-      - revert-migrations
-      - destroy-environment
+      # - revert-migrations
+      # - destroy-environment
 
   deploy-backend:
     docker:
@@ -346,8 +346,8 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure
-      - revert-migrations
-      - destroy-environment
+      # - revert-migrations
+      # - destroy-environment
 
   smoke-test:
     docker:
@@ -385,8 +385,8 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
 
 
   # cloudfront-update:
