@@ -207,7 +207,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/*
-      # - destroy-environment
+      - destroy-environment
 
   configure-infrastructure:
     docker:
@@ -237,8 +237,11 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
+      - aws-cli/setup
+      # - restore_cache:
+      #     keys: [backend-build]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Run migrations
           command: |
@@ -250,13 +253,17 @@ jobs:
       - run:
           name: Send migration results to kvdb.io OR memstash.io
           command: |
+            sudo apt-get update && sudo apt-get install -y ca-certificates
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              # sudo apt-get update && sudo apt-get install -y ca-certificates
-              
               curl https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
+      - persist_to_workspace:
+          root: ~/
+          paths:
+              - project/backend/migrations_dump.txt
       - revert-migrations
+      - destroy-environment
 
   deploy-frontend:
     docker:
