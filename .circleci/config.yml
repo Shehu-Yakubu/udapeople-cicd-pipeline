@@ -23,8 +23,9 @@ commands:
   destroy-environment:
     description: "Destroy backend and front-end cloudformation stacks given a workflow ID."
     parameters:
-      workflow_id:
+      Workflow_ID:
         type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: "Destroy environments"
@@ -47,6 +48,7 @@ commands:
     parameters:
       Workflow_ID:
         type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: "Revert migrations"
@@ -205,8 +207,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/*
-      - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment
 
   configure-infrastructure:
     docker:
@@ -230,7 +231,6 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
             cat ~/project/.circleci/ansible/inventory.txt
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -258,9 +258,7 @@ jobs:
               curl https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
@@ -300,9 +298,7 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
    
   deploy-backend:
     docker:
@@ -343,9 +339,7 @@ jobs:
 
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
@@ -390,9 +384,7 @@ jobs:
               return 1
             fi
       - destroy-environment
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   # cloudfront-update:
   #   docker:
