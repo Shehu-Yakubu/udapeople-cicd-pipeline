@@ -21,7 +21,7 @@ commands:
   #         template: basic_success_1
   
   destroy-environment:
-    description: "Destroy backend and front-end cloudformation stacks given a workflow ID."
+    description: Destroy backend and front-end cloudformation stacks given a workflow ID.
     parameters:
       Workflow_ID:
         type: string
@@ -32,7 +32,7 @@ commands:
           when: on_fail
           command: |
             # Empty frontend bucket
-            echo "Destroying environment: << parameters.workflow_id >>"
+            echo "Destroying environment: << parameters.Workflow_ID >>"
             aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
             
             # Delete frontend stack
