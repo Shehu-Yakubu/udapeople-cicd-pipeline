@@ -288,8 +288,8 @@ jobs:
               sudo apt-get update && sudo apt-get install -y ca-certificates
               curl "https://kvdb.io/9bL3qcS3G4YhbiEwh1vnVf/migration_${CIRCLE_WORKFLOW_ID:0:7}"  -d '1'
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
 
   deploy-frontend:
     docker:
@@ -334,8 +334,8 @@ jobs:
       #     root: ~/
       #     paths:
       #       - backend_ip.txt
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
    
   deploy-backend:
     docker:
@@ -376,8 +376,8 @@ jobs:
             cat inventory.txt
 
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
 
   smoke-test:
     docker:
@@ -420,8 +420,8 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
 
   # cloudfront-update:
   #   docker:
