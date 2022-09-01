@@ -237,13 +237,11 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:alpine3
     steps:
       - checkout
       - restore_cache:
           keys: [backend-build]
-      # - attach_workspace:
-      #     at: ~/
       - run:
           name: Run migrations
           command: |
