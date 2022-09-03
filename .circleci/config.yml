@@ -320,7 +320,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum install -y ansible nodejs npm curl
+            yum install -y curl
+            curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
+            sudo yum install nodejs
       
       - run:
           name: Get backend url
