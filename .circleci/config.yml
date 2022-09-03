@@ -445,7 +445,7 @@ jobs:
             echo "Sleeping for 1 minute"
             sleep 60
             
-            if curl "${API_URL}/api/status" | sudo grep "ok"
+            if curl "${API_URL}/api/status" | grep "ok"
             then
                 return 0
             else
