@@ -114,7 +114,7 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
       
-      - notify-slack-failure
+      - notify-on-failure
       - notify-slack-pass
 
   # Test frontend job
@@ -546,8 +546,8 @@ jobs:
   #             echo "----------------No need to clean up-----------------"
   #           fi
 
-  #     - notify_slack_error
-  #     - notify_slack_pass
+  #     - notify-on-failure
+      # - notify-slack-pass
       
 workflows:
   default:
