@@ -113,9 +113,6 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      
-      - notify-on-failure
-      - notify-slack-pass
 
   # Test frontend job
   test-frontend:
@@ -545,9 +542,6 @@ jobs:
   #           else
   #             echo "----------------No need to clean up-----------------"
   #           fi
-
-  #     - notify-on-failure
-      # - notify-slack-pass
       
 workflows:
   default:
