@@ -370,8 +370,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            pwd
-            cd backend
+            # pwd
 
             touch .env
             echo ENVIRONMENT=prod > ".env"
@@ -386,6 +385,7 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
 
             pwd
+            cd backend
             ls -al
             npm install
             npm run build
