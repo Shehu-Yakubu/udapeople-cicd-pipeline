@@ -311,7 +311,6 @@ jobs:
           name: Install tar and gzip
           command: |
             apk add --update tar gzip
-            # yum install -y tar gzip
 
       - attach_workspace:
           at: ~/
@@ -321,9 +320,6 @@ jobs:
           command: |
             apk add --update ansible nodejs npm curl
             pip install awscli
-            # yum install -y curl
-            # curl -sL https://rpm.nodesource.com/setup_10.x
-            # yum install -y nodejs
       
       - run:
           name: Get backend url
