@@ -154,9 +154,9 @@ jobs:
             npm install
             npm run test
       
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-test
+      # - save_cache:
+      #     paths: [backend/node_modules]
+      #     key: backend-test
   
   # Scan frontend job
   scan-frontend:
@@ -370,9 +370,8 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            pwd
-            cd backend
-
+            # pwd
+           
             touch .env
             echo ENVIRONMENT=prod > ".env"
             echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> ".env"
@@ -385,6 +384,7 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
 
+            cd backend
             pwd
             ls -al
             npm install
@@ -401,7 +401,7 @@ jobs:
             echo "Contents of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      
+
       - destroy-environment
       - revert-migrations
 
@@ -427,7 +427,7 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --filters "Name=tag:project,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text)
             echo "${BACKEND_IP}"
 
@@ -437,7 +437,7 @@ jobs:
             echo "Sleeping for 40 seconds"
             sleep 40
             
-            if curl "${API_URL}/api/status" | grep "ok"
+            if curl --connect-timeout 20 "${API_URL}/api/status" | grep "ok"
             then
                 return 0
             else
@@ -479,19 +479,16 @@ jobs:
           name: Saving Old Workflow ID
           command: |
             export OldWorkflowID=$(aws cloudformation list-exports \
-              --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
-            echo OldWorkflowID: "${OldWorkflowID}"
-            echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
+              --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text | tail -c 8)
+            echo $OldWorkflowID >> ~/project/OldWorkflowID.txt
+            cat ~/project/OldWorkflowID.txt
+            # echo OldWorkflowID: "${OldWorkflowID}"
+            # echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
             # aws cloudformation \
             #    list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
             #    --no-paginate --output text > ~/workflowfile.txt
             # cat ~/workflowfile.txt
-
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-      #       - workflowfile.txt
 
       - run:
           name: Update cloudfront distribution
@@ -499,10 +496,11 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
               --stack-name "InitialStack" \
-              --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
             
-            echo OldWorkflowID: "${OldWorkflowID}"
+            # echo OldWorkflowID: "${OldWorkflowID}"
+            echo OldWorkflowID: | cat ~/project/OldWorkflowID.txt
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
   # Cleanup job
