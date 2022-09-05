@@ -6,20 +6,20 @@ orbs:
 
 commands:
   # Notify on failure
-  notify-on-failure:
-    steps:
-      - slack/notify:
-          mentions: "@Shehu Yakubu"
-          event: fail
-          template: basic_fail_1
+  # notify-on-failure:
+  #   steps:
+  #     - slack/notify:
+  #         mentions: "@Shehu Yakubu"
+  #         event: fail
+  #         template: basic_fail_1
   
   # Notify slack pass
-  notify-slack-pass:
-    steps:
-      - slack/notify:
-          mentions: "@Shehu Yakubu"
-          event: pass
-          template: basic_success_1
+  # notify-slack-pass:
+  #   steps:
+  #     - slack/notify:
+  #         mentions: "@Shehu Yakubu"
+  #         event: pass
+  #         template: basic_success_1
   
   # Destroy environment
   destroy-environment:
